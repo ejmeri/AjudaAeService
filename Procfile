@@ -1,1 +1,1 @@
-node app
+node node app
