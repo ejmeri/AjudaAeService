@@ -41,7 +41,7 @@ if (!global.hasOwnProperty('db')) {
 	global.db.User.hasMany(global.db.Profile)
 	global.db.Profile.hasMany(global.db.SkillProfile)
 	global.db.Skill.hasMany(global.db.SkillProfile)
-	global.db.Skill.hasMany(global.db.Area)
+	global.db.Area.hasMany(global.db.Skill)
 	global.db.Profile.hasMany(global.db.Question)
 	global.db.Profile.hasMany(global.db.Answer)
 	global.db.Question.hasMany(global.db.Answer)

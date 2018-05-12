@@ -8,6 +8,8 @@ module.exports = function (sequelize, DataTypes) {
         name: {
             type: DataTypes.STRING,
 			allowNull: false
-        }
+        },
+		area_id:{ type: DataTypes.INTEGER}
+        
     });
 };

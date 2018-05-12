@@ -2,10 +2,52 @@ var express = require('express');
 var router = express.Router();
 
 var db = require('../models');
-
+const Operator = require('sequelize').Op;
 
 router.get('/', (req, res) => {
     res.send('Olá mundo');
+});
+
+router.get('/feed/:profile_id', async (req, res) => {
+
+    const {profile_id} = req.params;
+    const skillprofile = await db.SkillProfile.findAll({where: {profile_id: profile_id}});
+
+    var questions = [];
+    var skills_id = [];
+    var questions_id = [];
+
+    try {
+
+        if(skillprofile)
+            return res.send({questions: await fillfeedback(), status: true});
+        else
+            skillprofile.forEach(element => skills_id.push(element.skill_id));
+        
+        var skillquestion = await db.SkillQuestion.findAll({where: {skill_id: {[Operator.in]:[skills_id]}}, limit: 75, order: db.sequelize.random()});
+    
+        if(skillquestion == []) {
+            skillquestion.forEach(element => questions_id.push(element.question_id));
+            questions = await db.Question.findAll({where:{id: {[Operator.in]:[questions_id]}}});            
+        }
+        else 
+            return res.send({questions: await fillfeedback(), status: true});
+    
+    } catch (err) {
+        return res.status(400).send({error: err, status: false});
+    }
+    
+    res.send({questions: questions, status: true});
+});
+
+router.get('/unique/:title', async (req, res) => {
+    const {title} = req.params;
+
+    try {
+        // var questions = ar PAREI NO MEIO MESMO RSRSRRRR
+    } catch (err) {
+        return res.status(400).send({error: err, status: false});
+    }
 });
 
 router.post('/', async (req, res) => {
@@ -75,5 +117,9 @@ router.post('/reactionquestion', async (req, res) => {
     res.send({ reactionquestion: reactionquestion, status: true})
 
 });
+
+async function fillfeedback() {
+    return await db.Question.findAll({limit: 75, order: db.sequelize.random()}); 
+}
 
 module.exports = app => app.use('/question', router);
