@@ -8,7 +8,7 @@ var db = require('../models');
 // new skill
 router.post('/', async (req, res) => {
 
-    const {name, area_id} = req.params;
+    const {name, area_id} = req.body;
 
     try {
         
@@ -26,7 +26,7 @@ router.post('/', async (req, res) => {
 
 // new area
 router.post('/area', async (req, res) => {
-    const {name} = req.params;
+    const {name} = req.body;
 
     try {
         
