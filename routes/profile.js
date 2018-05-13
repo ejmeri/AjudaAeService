@@ -172,7 +172,7 @@ router.post('/contact', async (req, res) => {
 }); 
 
 // get all questions of a profile user
-router.get('/:profile_id', async (req, res) => {
+router.get('/questions/:profile_id', async (req, res) => {
     const {profile_id} = req.params;
 
     try {
