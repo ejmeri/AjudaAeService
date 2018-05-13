@@ -40,7 +40,6 @@ router.put('/:user_id', async (req, res) => {
 
         const Profile = await db.Profile.findOne({where:{user_id: user_id}});
 
-        console.log(Profile);
         if(!profile.name)
             return res.status(400).send({error: 'Name is required', status: false});
 
