@@ -34,7 +34,7 @@ router.post('/area', async (req, res) => {
             return res.status(400).send({error: 'Name area is required.', status: false});
 
 
-        var area = db.Area.create({name: name});
+        var area = await db.Area.create({name: name});
         
     } catch (err) {
         return res.status(400).send({error: err, status: false});

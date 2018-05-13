@@ -56,7 +56,6 @@ router.put('/:user_id', async (req, res) => {
 
 });
 
-
 /**
  * @api {post} /profile
  * @apiGroup Profile
@@ -117,7 +116,6 @@ router.post('/', async (req, res) => {
 
 });
 
-
 /**
  * @api {post} /skillprofile
  * @apiGroup Status
@@ -151,6 +149,7 @@ router.post('/skillprofile', async (req, res) => {
 
 });
 
+// new contact of a profile
 router.post('/contact', async (req, res) => {
     let contact = db.Contact;
     contact = req.body;
@@ -171,6 +170,19 @@ router.post('/contact', async (req, res) => {
 
     res.send({contact:contact, status: true, description: 'Contact saved!'});
 }); 
+
+// get all questions of a profile user
+router.get('/:profile_id', async (req, res) => {
+    const {profile_id} = req.params;
+
+    try {
+        var questions = await db.Question.findAll({where: {profile_id: profile_id}});
+    } catch (err) {
+        return res.status(400).send({error: err, status: false});
+    }
+
+    res.send({questions: questions, status: true});
+});
 
 module.exports = app =>  app.use('/profile', router);
 
