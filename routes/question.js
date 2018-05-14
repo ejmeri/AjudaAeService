@@ -10,11 +10,11 @@ router.get('/', (req, res) => {
 
 router.get('/feed', async (req, res) => {
     try {
-        const questions = await fillfeed(); // only 75 questions randomize
+        var question = await fillfeed(); // only 75 questions randomize
     } catch (err) {
         return res.status(400).send({error: err, status: false});
     }
-    res.send({questions: questions, status: true});
+    res.send({questions: question, status: true});
 });
 
 router.get('/feed/:profile_id', async (req, res) => {

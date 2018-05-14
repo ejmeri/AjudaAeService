@@ -7,6 +7,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(express.static('public'));
 
+
 var db = require('./models'); // database and tables
 
 const consign = require('consign');
@@ -16,6 +17,11 @@ consign()
     .into(app);
 
 
+// // catch 404 and forward to error handler
+// app.use(function (req, res, next) {
+// //    res.status(404).send({error: 'Router not found', status: false});
+// 	res.sendFile('error404/index.html');
+// });
 	
 db.sequelize.sync().then(function () {
 	server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function () {
