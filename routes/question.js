@@ -8,6 +8,15 @@ router.get('/', (req, res) => {
     res.send('Olá mundo');
 });
 
+router.get('/feed', async (req, res) => {
+    try {
+        const questions = await fillfeed(); // only 75 questions randomize
+    } catch (err) {
+        return res.status(400).send({error: err, status: false});
+    }
+    res.send({questions: questions, status: true});
+});
+
 router.get('/feed/:profile_id', async (req, res) => {
 
     const {profile_id} = req.params;
@@ -121,6 +130,10 @@ router.post('/reactionquestion', async (req, res) => {
 
 async function fillfeed() {
     return await db.Question.findAll({include: {model: db.Profile }, limit: 75, order: db.sequelize.random()}); 
+}
+
+async function allquestions() {
+    return await db.Question.findAll({include: {model: db.Profile }, order: db.sequelize.random()});  
 }
 
 module.exports = app => app.use('/question', router);
