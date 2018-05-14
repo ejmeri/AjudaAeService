@@ -1,12 +1,11 @@
-const mysql = require('../config/mysql');
-//const option = require('../database/option').heroku; // NUNCA ESQUECER DE TROCAR
+//sempre trocar aqui quando for subir em producao, depois faço uma regra mais certinha pra prod e homo
+const mysql = require('../config/postgres');
 
 if (!global.hasOwnProperty('db')) {
 	var Sequelize = require('sequelize'),
 		sequelize = null
 
 	// the application is executed on the local machine ... use mysql
-	console.log('mysql database');
 	sequelize = new Sequelize(mysql.database, mysql.username, mysql.password, mysql.params);
 
 
@@ -29,7 +28,6 @@ if (!global.hasOwnProperty('db')) {
 		ProfileGroup: sequelize.import(__dirname + '/profilegroup'),
 		SkillGroup: sequelize.import(__dirname + '/skillgroup'),
 		// Ejota: sequelize.import(__dirname + '/ejota'),
-		//Command: sequelize.import(__dirname + '/command')
 		// add your other models here
 	}
 
@@ -55,6 +53,9 @@ if (!global.hasOwnProperty('db')) {
 	global.db.Profile.hasMany(global.db.ProfileGroup)
 	global.db.Group.hasMany(global.db.SkillGroup)
 	global.db.Skill.hasMany(global.db.SkillGroup)
+
+	// JOINERS
+	global.db.Question.belongsTo(global.db.Profile);
 
 }
 

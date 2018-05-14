@@ -10,6 +10,5 @@ module.exports = function (sequelize, DataTypes) {
 			allowNull: false
         },
 		area_id:{ type: DataTypes.INTEGER}
-        
     });
 };

@@ -19,19 +19,20 @@ router.get('/feed/:profile_id', async (req, res) => {
 
     try {
 
-        if(skillprofile)
-            return res.send({questions: await fillfeedback(), status: true});
+        if(skillprofile == 0)
+            return res.send({questions: await fillfeed(), status: true});
         else
             skillprofile.forEach(element => skills_id.push(element.skill_id));
         
         var skillquestion = await db.SkillQuestion.findAll({where: {skill_id: {[Operator.in]:[skills_id]}}, limit: 75, order: db.sequelize.random()});
-    
-        if(skillquestion == []) {
+        
+
+        if(!skillquestion == 0) {
             skillquestion.forEach(element => questions_id.push(element.question_id));
-            questions = await db.Question.findAll({where:{id: {[Operator.in]:[questions_id]}}});            
+            questions = await db.Question.findAll({ include: {model: db.Profile }, where:{id: {[Operator.in]:[questions_id]}}});            
         }
         else 
-            return res.send({questions: await fillfeedback(), status: true});
+            return res.send({questions: await fillfeed(), status: true});
     
     } catch (err) {
         return res.status(400).send({error: err, status: false});
@@ -118,8 +119,8 @@ router.post('/reactionquestion', async (req, res) => {
 
 });
 
-async function fillfeedback() {
-    return await db.Question.findAll({limit: 75, order: db.sequelize.random()}); 
+async function fillfeed() {
+    return await db.Question.findAll({include: {model: db.Profile }, limit: 75, order: db.sequelize.random()}); 
 }
 
 module.exports = app => app.use('/question', router);
