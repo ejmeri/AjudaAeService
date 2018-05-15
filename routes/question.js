@@ -39,7 +39,6 @@ router.get('/feed/:profile_id', async (req, res) => {
         if(!skillquestion == 0) {
             skillquestion.forEach(element => questions_id.push(element.question_id));
             questions = await db.SkillQuestion.findAll({ include: [{model: db.Skill, attributes: ['name', 'area_id']}, {model: db.Question, include: [{ model: db.Profile, attributes: ['name']}]}], where:{id: {[Operator.in]:[questions_id]}}});            
-            console.log(questions);
         }
         else 
             return res.send({questions: await fillfeed(), status: true});
@@ -130,7 +129,7 @@ router.post('/reactionquestion', async (req, res) => {
 });
 
 async function fillfeed() {
-    return await db.Question.findAll({include: {model: db.Profile }, limit: 75, order: db.sequelize.random()}); 
+    return await db.SkillQuestion.findAll({ include: [{model: db.Skill, attributes: ['name', 'area_id']}, {model: db.Question, include: [{ model: db.Profile, attributes: ['name']}]}]});            
 }
 
 async function allquestions() {
