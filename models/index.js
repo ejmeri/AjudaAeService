@@ -1,5 +1,5 @@
 //sempre trocar aqui quando for subir em producao, depois faço uma regra mais certinha pra prod e homo
-const mysql = require('../config/postgres');
+const mysql = require('../config/mysql');
 
 if (!global.hasOwnProperty('db')) {
 	var Sequelize = require('sequelize'),
@@ -56,7 +56,8 @@ if (!global.hasOwnProperty('db')) {
 
 	// JOINERS
 	global.db.Question.belongsTo(global.db.Profile);
-
+	global.db.SkillQuestion.belongsTo(global.db.Question);
+	global.db.SkillQuestion.belongsTo(global.db.Skill);
 }
 
 module.exports = global.db;
