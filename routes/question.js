@@ -102,11 +102,11 @@ router.get('/feed/:profile_id', async (req, res) => {
                     attributes: ['id', 'skill_id', 'question_id'],
                     include: [{
                         model: db.Skill,
-                        attributes: ['name', 'area_id']
+                        attributes: ['id', 'name', 'area_id']
                     }]
                 }, {
                     model: db.Profile,
-                    attributes: ['name']
+                    attributes: ['id', 'name', 'birthday', 'user_id', 'status']
                 }],
                 where: {
                     id: {
@@ -146,11 +146,11 @@ router.get('/search/:phrase', async (req, res) => {
                 attributes: ['id', 'skill_id'],
                 include: [{
                     model: db.Skill,
-                    attributes: ['name', 'area_id']
+                    attributes: ['id','name', 'area_id']
                 }]
             }, {
                 model: db.Profile,
-                attributes: ['name']
+                attributes: ['id', 'name', 'birthday', 'user_id', 'status']
             }],
             where: {
                 [Operator.or]: [{
@@ -395,11 +395,11 @@ async function fillfeed() {
             attributes: ['id', 'skill_id'],
             include: [{
                 model: db.Skill,
-                attributes: ['name', 'area_id']
+                attributes: ['id','name', 'area_id']
             }]
         }, {
             model: db.Profile,
-            attributes: ['name']
+            attributes: ['id', 'name', 'birthday', 'user_id', 'status']
         }],
         limit: 75,
         order: db.sequelize.random()
