@@ -8,6 +8,8 @@ router.get('/', (req, res) => {
     res.send('Olá mundo');
 });
 
+
+// get unique question
 router.get('/:question_id', async (req, res) => {
 
     const {question_id} = req.params;
@@ -35,6 +37,7 @@ router.get('/feed', async (req, res) => {
     });
 });
 
+// feed
 router.get('/feed/:profile_id', async (req, res) => {
 
     const {
@@ -108,6 +111,7 @@ router.get('/feed/:profile_id', async (req, res) => {
     });
 });
 
+// search question
 router.get('/search/:phrase', async (req, res) => {
     const {
         phrase
@@ -280,9 +284,52 @@ router.post('/reactionquestion', async (req, res) => {
 
 });
 
+router.delete('/:question_id', async (req, res) => {
+    const {question_id} = req.params;
+
+    try {   
+        const Question = await db.Question.findOne({where: {id: question_id}});
+        
+        if(!Question)
+            return res.status(400).send({error: 'Answer not found', status: false});
+
+        db.SkillQuestion.destroy({where: {question_id: question_id}});
+        Question.destroy();
+
+    } catch (err) {
+         return res.status(400).send({error: err, status: false});
+    }
+
+    res.send({response: 'Question deleted', status: true});
+});
+
+router.delete('/answer/:answer_id', async (req, res) => {
+    const {answer_id} = req.params;
+
+    try {   
+        const Answer = await db.Answer.findOne({where: {id: answer_id}});
+        
+        if(!Answer)
+            return res.status(400).send({error: 'Answer not found', status: false});
+
+        
+        Answer.destroy();
+
+    } catch (err) {
+         return res.status(400).send({error: err, status: false});
+    }
+
+    res.send({response: 'Answer deleted', status: true});
+
+});
+
+router.delete('/deleteall', async (req, res) => {
+    db.SkillQuestion.destroy();
+    db.Question.destroy();
+});
+
 async function fillfeed() {
-    console.log('object');
-    return await db.SkillQuestion.findAll({
+    var q = await db.SkillQuestion.findAll({
         include: [{
             model: db.Skill,
             attributes: ['name', 'area_id']
@@ -296,6 +343,11 @@ async function fillfeed() {
         limit: 75,
         order: db.sequelize.random()
     });
+
+    if(!q) 
+        return 'No results';
+    
+    return q;
 }
 
 async function allquestions() {
