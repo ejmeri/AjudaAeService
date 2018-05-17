@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 
 
-
 /**
  * @api {get} / API Status
  * @apiGroup Status
@@ -13,7 +12,7 @@ var router = express.Router();
  */
 
 router.get('/', (req, res) => {
-    res.send('Olá Mundo');
+    res.render('index');
 });
 
 
