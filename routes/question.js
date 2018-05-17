@@ -8,6 +8,18 @@ router.get('/', (req, res) => {
     res.send('Olá mundo');
 });
 
+router.get('/:question_id', async (req, res) => {
+
+    const {question_id} = req.params;
+    try {
+        var questions = await db.Question.findAll({ include: [{model: db.Answer}], where: {id: question_id}});
+    } catch (err) {
+        return res.status(400).send({error: err, status: false});
+    }
+
+    res.send({questions: questions, status: true});
+});
+
 router.get('/feed', async (req, res) => {
     try {
         var question = await fillfeed(); // only 75 questions randomize
@@ -268,7 +280,8 @@ router.post('/reactionquestion', async (req, res) => {
 
 });
 
-async fillfeed => {
+async function fillfeed() {
+    console.log('object');
     return await db.SkillQuestion.findAll({
         include: [{
             model: db.Skill,
@@ -285,7 +298,7 @@ async fillfeed => {
     });
 }
 
-async allquestions => {
+async function allquestions() {
     return await db.Question.findAll({
         include: {
             model: db.Profile

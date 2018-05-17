@@ -184,6 +184,19 @@ router.get('/questions/:profile_id', async (req, res) => {
     res.send({questions: questions, status: true});
 });
 
+// get all answers of a profile user
+router.get('/answers/:profile_id', async (req, res) => {
+    const {profile_id} = req.params;
+
+    try {
+        var answers = await db.Answers.findAll({where: {profile_id: profile_id}});
+    } catch (err) {
+        return res.status(400).send({error: err, status: false});
+    }
+
+    res.send({questions: questions, status: true});
+});
+
 module.exports = app =>  app.use('/profile', router);
 
 // http:8080/localhost/profile -> post

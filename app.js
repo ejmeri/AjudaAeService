@@ -12,8 +12,6 @@ app.use(express.urlencoded({extended: false}));
 app.set('views', __dirname + '/views');
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'ejs');
-
-
 app.use(express.static(path.join(__dirname, 'public')));
 
 var db = require('./models'); // database and tables
@@ -27,7 +25,7 @@ consign()
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-	res.render('notfound/index');
+	res.render('notfound');
 });
 	
 db.sequelize.sync().then(function () {
