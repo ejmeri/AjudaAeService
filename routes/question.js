@@ -14,7 +14,7 @@ router.get('/:question_id', async (req, res) => {
 
     const {question_id} = req.params;
     try {
-        var questions = await db.Question.findAll({ include: [{model: db.Answer}], where: {id: question_id}});
+        var questions = await db.Question.findAll({ include: [{model: db.Answer}, {model: db.SkillQuestion}], where: {id: question_id}});
     } catch (err) {
         return res.status(400).send({error: err, status: false});
     }
