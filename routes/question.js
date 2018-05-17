@@ -324,6 +324,7 @@ router.delete('/answer/:answer_id', async (req, res) => {
 });
 
 router.delete('/deleteall', async (req, res) => {
+    db.Answer.destroy();
     db.SkillQuestion.destroy();
     db.Question.destroy();
 });
