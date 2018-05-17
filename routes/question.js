@@ -10,16 +10,36 @@ router.get('/', (req, res) => {
 
 
 // get unique question
-router.get('/:question_id', async (req, res) => {
+router.get('/unique/:question_id', async (req, res) => {
 
-    const {question_id} = req.params;
+    const {
+        question_id
+    } = req.params;
     try {
-        var questions = await db.Question.findAll({ include: [{model: db.Answer}, {model: db.SkillQuestion}], where: {id: question_id}});
+        var questions = await db.Question.findAll({
+            include: [{
+                model: db.Answer
+            }, {
+                model: db.SkillQuestion,
+                include: [{
+                    model: db.Skill
+                }]
+            }],
+            where: {
+                id: question_id
+            }
+        });
     } catch (err) {
-        return res.status(400).send({error: err, status: false});
+        return res.status(400).send({
+            error: err,
+            status: false
+        });
     }
 
-    res.send({questions: questions, status: true});
+    res.send({
+        questions: questions,
+        status: true
+    });
 });
 
 router.get('/feed', async (req, res) => {
@@ -75,19 +95,21 @@ router.get('/feed/:profile_id', async (req, res) => {
 
         if (!skillquestion == 0) {
             skillquestion.forEach(element => questions_id.push(element.question_id));
-            questions = await db.SkillQuestion.findAll({
+
+            questions = await db.Question.findAll({
                 include: [{
-                    model: db.Skill,
-                    attributes: ['name', 'area_id']
-                }, {
-                    model: db.Question,
+                    model: db.SkillQuestion,
+                    attributes: ['id', 'skill_id', 'question_id'],
                     include: [{
-                        model: db.Profile,
-                        attributes: ['name']
+                        model: db.Skill,
+                        attributes: ['name', 'area_id']
                     }]
+                }, {
+                    model: db.Profile,
+                    attributes: ['name']
                 }],
                 where: {
-                    question_id: {
+                    id: {
                         [Operator.in]: [questions_id]
                     }
                 }
@@ -118,30 +140,33 @@ router.get('/search/:phrase', async (req, res) => {
     } = req.params;
 
     try {
-        var questions = await db.SkillQuestion.findAll({
+        var questions = await db.Question.findAll({
             include: [{
-                model: db.Skill,
-                attributes: ['name', 'area_id']
-            }, {
-                model: db.Question,
+                model: db.SkillQuestion,
+                attributes: ['id', 'skill_id'],
                 include: [{
-                    model: db.Profile,
-                    attributes: ['name']
-                }],
-                where: {
-                    [Operator.or]: [{
-                            title: {
-                                [Operator.like]: `${phrase}%`
-                            }
-                        },
-                        {
-                            description: {
-                                [Operator.like]: `%${phrase}%`
-                            }
+                    model: db.Skill,
+                    attributes: ['name', 'area_id']
+                }]
+            }, {
+                model: db.Profile,
+                attributes: ['name']
+            }],
+            where: {
+                [Operator.or]: [{
+                        title: {
+                            [Operator.like]: `${phrase}%`
                         }
-                    ]
-                }
-            }]
+                    },
+                    {
+                        description: {
+                            [Operator.like]: `%${phrase}%`
+                        }
+                    }
+                ]
+            },
+            limit: 75,
+            order: db.sequelize.random()
         });
     } catch (err) {
         return res.status(400).send({
@@ -285,41 +310,75 @@ router.post('/reactionquestion', async (req, res) => {
 });
 
 router.delete('/:question_id', async (req, res) => {
-    const {question_id} = req.params;
+    const {
+        question_id
+    } = req.params;
 
-    try {   
-        const Question = await db.Question.findOne({where: {id: question_id}});
-        
-        if(!Question)
-            return res.status(400).send({error: 'Answer not found', status: false});
+    try {
+        const Question = await db.Question.findOne({
+            where: {
+                id: question_id
+            }
+        });
 
-        db.SkillQuestion.destroy({where: {question_id: question_id}});
+        if (!Question)
+            return res.status(400).send({
+                error: 'Answer not found',
+                status: false
+            });
+
+        db.SkillQuestion.destroy({
+            where: {
+                question_id: question_id
+            }
+        });
         Question.destroy();
 
     } catch (err) {
-         return res.status(400).send({error: err, status: false});
+        return res.status(400).send({
+            error: err,
+            status: false
+        });
     }
 
-    res.send({response: 'Question deleted', status: true});
+    res.send({
+        response: 'Question deleted',
+        status: true
+    });
 });
 
 router.delete('/answer/:answer_id', async (req, res) => {
-    const {answer_id} = req.params;
+    const {
+        answer_id
+    } = req.params;
 
-    try {   
-        const Answer = await db.Answer.findOne({where: {id: answer_id}});
-        
-        if(!Answer)
-            return res.status(400).send({error: 'Answer not found', status: false});
+    try {
+        const Answer = await db.Answer.findOne({
+            where: {
+                id: answer_id
+            }
+        });
 
-        
+        if (!Answer)
+            return res.status(400).send({
+                error: 'Answer not found',
+                status: false
+            });
+
+
         Answer.destroy();
 
     } catch (err) {
-         return res.status(400).send({error: err, status: false});
+        return res.status(400).send({
+            error: err,
+            status: false
+        });
     }
 
-    res.send({response: 'Answer deleted', status: true});
+    res.send({
+        response: 'Answer deleted',
+        status: true
+    });
 
 });
 
@@ -330,24 +389,25 @@ router.delete('/deleteall', async (req, res) => {
 });
 
 async function fillfeed() {
-    var q = await db.SkillQuestion.findAll({
+    var q = await db.Question.findAll({
         include: [{
-            model: db.Skill,
-            attributes: ['name', 'area_id']
-        }, {
-            model: db.Question,
+            model: db.SkillQuestion,
+            attributes: ['id', 'skill_id'],
             include: [{
-                model: db.Profile,
-                attributes: ['name']
+                model: db.Skill,
+                attributes: ['name', 'area_id']
             }]
+        }, {
+            model: db.Profile,
+            attributes: ['name']
         }],
         limit: 75,
         order: db.sequelize.random()
     });
 
-    if(!q) 
+    if (!q)
         return 'No results';
-    
+
     return q;
 }
 
