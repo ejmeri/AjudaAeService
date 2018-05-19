@@ -8,8 +8,7 @@ router.get('/', (req, res) => {
     res.send('Olá mundo');
 });
 
-
-// get unique question
+// get unique question and answers question
 router.get('/unique/:question_id', async (req, res) => {
 
     const {
@@ -24,6 +23,9 @@ router.get('/unique/:question_id', async (req, res) => {
                 include: [{
                     model: db.Skill
                 }]
+            }, {
+                model: db.Profile,
+                attributes: ['id', 'name', 'birthday', 'user_id', 'status']
             }],
             where: {
                 id: question_id
@@ -42,6 +44,7 @@ router.get('/unique/:question_id', async (req, res) => {
     });
 });
 
+// get feed no params
 router.get('/feed', async (req, res) => {
     try {
         var question = await fillfeed(); // only 75 questions randomize
@@ -146,7 +149,7 @@ router.get('/search/:phrase', async (req, res) => {
                 attributes: ['id', 'skill_id'],
                 include: [{
                     model: db.Skill,
-                    attributes: ['id','name', 'area_id']
+                    attributes: ['id', 'name', 'area_id']
                 }]
             }, {
                 model: db.Profile,
@@ -284,9 +287,9 @@ router.post('/reactionquestion', async (req, res) => {
                 status: false
             });
 
-        if (!skill_id)
+        if (!question_id)
             return res.status(400).send({
-                error: 'Skill id is required',
+                error: 'Question id is required',
                 status: false
             });
 
@@ -347,46 +350,12 @@ router.delete('/:question_id', async (req, res) => {
     });
 });
 
-router.delete('/answer/:answer_id', async (req, res) => {
-    const {
-        answer_id
-    } = req.params;
-
-    try {
-        const Answer = await db.Answer.findOne({
-            where: {
-                id: answer_id
-            }
-        });
-
-        if (!Answer)
-            return res.status(400).send({
-                error: 'Answer not found',
-                status: false
-            });
-
-
-        Answer.destroy();
-
-    } catch (err) {
-        return res.status(400).send({
-            error: err,
-            status: false
-        });
-    }
-
-    res.send({
-        response: 'Answer deleted',
-        status: true
-    });
-
-});
-
+/*
 router.delete('/deleteall', async (req, res) => {
     db.Answer.destroy();
     db.SkillQuestion.destroy();
     db.Question.destroy();
-});
+});*/
 
 async function fillfeed() {
     var q = await db.Question.findAll({
@@ -395,7 +364,7 @@ async function fillfeed() {
             attributes: ['id', 'skill_id'],
             include: [{
                 model: db.Skill,
-                attributes: ['id','name', 'area_id']
+                attributes: ['id', 'name', 'area_id']
             }]
         }, {
             model: db.Profile,

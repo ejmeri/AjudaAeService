@@ -3,7 +3,6 @@ var router = express.Router();
 var db = require('../models');
 
 
-
 router.get('/', (req, res) => {
     res.send('Hello User, your profile.');
 });
@@ -176,7 +175,12 @@ router.get('/questions/:profile_id', async (req, res) => {
     const {profile_id} = req.params;
 
     try {
+
         var questions = await db.Question.findAll({where: {profile_id: profile_id}});
+
+        if(!questions)
+            questions = 'No results.';
+
     } catch (err) {
         return res.status(400).send({error: err, status: false});
     }
@@ -190,11 +194,15 @@ router.get('/answers/:profile_id', async (req, res) => {
 
     try {
         var answers = await db.Answers.findAll({where: {profile_id: profile_id}});
+
+        if(!answers) 
+            answers = 'No results.';
+
     } catch (err) {
         return res.status(400).send({error: err, status: false});
     }
 
-    res.send({questions: questions, status: true});
+    res.send({answers: answers, status: true});
 });
 
 module.exports = app =>  app.use('/profile', router);
