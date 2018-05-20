@@ -59,6 +59,8 @@ if (!global.hasOwnProperty('db')) {
 	global.db.Question.belongsTo(global.db.Profile);
 	global.db.SkillQuestion.belongsTo(global.db.Question);
 	global.db.SkillQuestion.belongsTo(global.db.Skill);
+	global.db.SkillProfile.belongsTo(global.db.Skill);
+	global.db.SkillProfile.belongsTo(global.db.Profile);
 }
 
 module.exports = global.db;
