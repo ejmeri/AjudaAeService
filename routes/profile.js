@@ -55,38 +55,6 @@ router.put('/:user_id', async (req, res) => {
 
 });
 
-/**
- * @api {post} /profile
- * @apiGroup Profile
- * @apiSuccess {String} name Nome do perfil do usuário
- * @apiSuccess {String} birthday Data de nascimento do perfil (user).
- * @apiSuccess {Boolean} status Status do perfil.
- * @apiSuccess {Integer} user_id Id do usuário pertencente ao perfil.
- * @apiSuccessExample {json} Sucesso
- * HTTP/1.1 200 OK
- * {
-        "profile": {
-            "id": 1,
-            "name": "Elmeri EJOTA",
-            "birthday": '27/08/1997',
-            "status": "1",
-            "user_id": "2",
-            "created_at": "2018-04-28T01:37:37.000Z",
-            "updated_at": "2018-04-28T02:45:21.430Z"
-        },
-        "status": true,
-        "description": "Profile save."
-   }
-
- * @apiErrorExample {json} Error:
- *     HTTP/1.1 400 Forbidden
- *     {
- *       "error": "Message error",
- *        "status": false
- *     }
-
- */
-
 router.post('/', async (req, res) => {
     let profile = db.Profile;
     profile = req.body;
@@ -114,15 +82,6 @@ router.post('/', async (req, res) => {
     res.send({profile: profile, description: 'Profile save', status:true});
 
 });
-
-/**
- * @api {post} /skillprofile
- * @apiGroup Status
- * @apiSuccess {String} status Mensagem de status da TESTE
- * @apiSuccessExample {json} Sucesso
- * HTTP/1.1 200 OK
- * {"status": "AjudaAe API"}
- */
 
 router.post('/skillprofile', async (req, res) => {
     const {skill_id, profile_id, nivel} = req.body;
@@ -193,7 +152,7 @@ router.get('/answers/:profile_id', async (req, res) => {
     const {profile_id} = req.params;
 
     try {
-        var answers = await db.Answers.findAll({where: {profile_id: profile_id}});
+        var answers = await db.Answer.findAll({where: {profile_id: profile_id}});
 
         if(!answers) 
             answers = 'No results.';

@@ -8,37 +8,23 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-    const {
-        description,
-        profile_id,
-        question_id
-    } = req.body;
+    const {description, profile_id,question_id } = req.body;
 
     try {
 
         if (!description)
-            return res.status(400).send({
-                error: 'Description is required',
-                status: false
-            });
+            return res.status(400).send({ error: 'Description is required',status: false });
 
+      
         if (!profile_id)
-            return res.status(400).send({
-                error: 'Profile id is required',
-                status: false
-            });
+            return res.status(400).send({error: 'Profile id is required',status: false});
 
+        
         if (!question_id)
-            return res.status(400).send({
-                error: 'Question id is required',
-                status: false
-            });
+            return res.status(400).send({error: 'Question id is required',status: false});
 
-        var answer = await db.Answer.create({
-            description: description,
-            question_id: question_id,
-            profile_id: profile_id
-        });
+      
+        var answer = await db.Answer.create({description: description,question_id: question_id,profile_id: profile_id});
 
 
     } catch (err) {
@@ -48,10 +34,7 @@ router.post('/', async (req, res) => {
         });
     }
 
-    res.send({
-        answer: answer,
-        status: true
-    })
+    res.send({answer: answer,status: true});
 
 });
 
