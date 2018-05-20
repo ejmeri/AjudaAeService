@@ -17,7 +17,11 @@ router.get('/unique/:question_id', async (req, res) => {
     try {
         var questions = await db.Question.findAll({
             include: [{
-                model: db.Answer
+                model: db.Answer,
+                include: [{
+                    model: db.Profile,
+                    attributes: ['id', 'name', 'birthday', 'user_id', 'status']
+                }]
             }, {
                 model: db.SkillQuestion,
                 include: [{
@@ -66,7 +70,7 @@ router.get('/feed/:profile_id', async (req, res) => {
     const {
         profile_id
     } = req.params;
-    
+
     const skillprofile = await db.SkillProfile.findAll({
         where: {
             profile_id: profile_id
