@@ -66,6 +66,7 @@ router.get('/feed/:profile_id', async (req, res) => {
     const {
         profile_id
     } = req.params;
+    
     const skillprofile = await db.SkillProfile.findAll({
         where: {
             profile_id: profile_id

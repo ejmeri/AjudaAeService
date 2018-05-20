@@ -29,6 +29,7 @@ if (!global.hasOwnProperty('db')) {
 		SkillGroup: sequelize.import(__dirname + '/skillgroup'),
 		// Ejota: sequelize.import(__dirname + '/ejota'),
 		// add your other models here
+		// up
 	}
 
 	/*
