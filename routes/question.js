@@ -94,13 +94,13 @@ router.get('/feed/:profile_id', async (req, res) => {
             include :[{
                 model: db.SkillQuestion,
                 attributes: ['id', 'skill_id', 'question_id'],
-                where : {
-                    skill_id : { [Operator.in] : skills_id }
-                },
                 include : [{
                     model: db.Skill,
-                    attributes: ['id', 'name']
-                }]
+                    attributes: ['id', 'name', 'area_id']
+                }],
+                where : {
+                    skill_id : { [Operator.in] : skills_id }
+                }                
             },{
                 model: db.Profile,
                 attributes: ['id', 'name', 'birthday', 'user_id', 'status']
@@ -350,7 +350,7 @@ async function fillfeed() {
     var q = await db.Question.findAll({
         include: [{
             model: db.SkillQuestion,
-            attributes: ['id', 'skill_id'],
+            attributes: ['id', 'skill_id', 'question_id'],
             include: [{
                 model: db.Skill,
                 attributes: ['id', 'name', 'area_id']
