@@ -79,7 +79,6 @@ router.get('/feed/:profile_id', async (req, res) => {
 
     var questions = [];
     var skills_id = [];
-    var questions_id = [];
 
     try {
 
@@ -100,7 +99,7 @@ router.get('/feed/:profile_id', async (req, res) => {
                 model: db.SkillQuestion,
                 attributes: ['id', 'skill_id', 'question_id'],
                 where : {
-                    skill_id : { [Operator.in] : [skills_id] }
+                    skill_id : { [Operator.in] : [1,2,3,4,5,6] }
                 },
                 include : [{
                     model: db.Skill,
