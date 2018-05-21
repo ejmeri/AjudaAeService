@@ -91,10 +91,6 @@ router.get('/feed/:profile_id', async (req, res) => {
         
         
         questions = await db.Question.findAll({
-            include: [{
-                model: db.Profile,
-                attributes: ['id', 'name', 'birthday', 'user_id', 'status']
-            }],
             include :[{
                 model: db.SkillQuestion,
                 attributes: ['id', 'skill_id', 'question_id'],
@@ -105,6 +101,9 @@ router.get('/feed/:profile_id', async (req, res) => {
                     model: db.Skill,
                     attributes: ['id', 'name']
                 }]
+            },{
+                model: db.Profile,
+                attributes: ['id', 'name', 'birthday', 'user_id', 'status']
             }],
             limit: 75,
             order:  [['created_at', 'DESC']]
