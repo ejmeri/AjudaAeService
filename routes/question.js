@@ -66,7 +66,6 @@ router.get('/feed', async (req, res) => {
 
 // feed
 router.get('/feed/:profile_id', async (req, res) => {
-
     const {
         profile_id
     } = req.params;
@@ -89,7 +88,8 @@ router.get('/feed/:profile_id', async (req, res) => {
             });
         else
             skillprofile.forEach(element => skills_id.push(element.skill_id));
-
+        
+        
         questions = await db.Question.findAll({
             include: [{
                 model: db.Profile,
@@ -99,7 +99,7 @@ router.get('/feed/:profile_id', async (req, res) => {
                 model: db.SkillQuestion,
                 attributes: ['id', 'skill_id', 'question_id'],
                 where : {
-                    skill_id : { [Operator.in] : [1,2,3,4,5,6] }
+                    skill_id : { [Operator.in] : skills_id }
                 },
                 include : [{
                     model: db.Skill,
