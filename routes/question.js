@@ -20,7 +20,7 @@ router.get('/unique/:question_id', async (req, res) => {
                 model: db.Answer,
                 include: [{
                     model: db.Profile,
-                    attributes: ['id', 'name', 'birthday', 'user_id', 'status']
+                    attributes: ['id', 'name', 'birthday', 'status', 'user_id']
                 }]
             }, {
                 model: db.SkillQuestion,
@@ -29,7 +29,7 @@ router.get('/unique/:question_id', async (req, res) => {
                 }]
             }, {
                 model: db.Profile,
-                attributes: ['id', 'name', 'birthday', 'user_id', 'status']
+                attributes: ['id', 'name', 'birthday', 'status', 'user_id']
             }],
             where: {
                 id: question_id
