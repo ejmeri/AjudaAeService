@@ -91,42 +91,28 @@ router.get('/feed/:profile_id', async (req, res) => {
         else
             skillprofile.forEach(element => skills_id.push(element.skill_id));
 
-        var skillquestion = await db.SkillQuestion.findAll({
-            where: {
-                skill_id: {
-                    [Operator.in]: [skills_id]
-                }
-            },
+        questions = await db.Question.findAll({
+            include: [{
+                model: db.Profile,
+                attributes: ['id', 'name', 'birthday', 'user_id', 'status']
+            }],
+            include :[{
+                model: db.SkillQuestion,
+                attributes: ['id', 'skill_id', 'question_id'],
+                where : {
+                    skill_id : { [Operator.in] : [skills_id] }
+                },
+                include : [{
+                    model: db.Skill,
+                    attributes: ['id', 'name']
+                }]
+            }],
             limit: 75,
-            order: db.sequelize.random()
+            order:  [['created_at', 'DESC']]
         });
 
-        if (!skillquestion == 0) {
-            skillquestion.forEach(element => questions_id.push(element.question_id));
-
-            questions = await db.Question.findAll({
-                include: [{
-                    model: db.SkillQuestion,
-                    attributes: ['id', 'skill_id', 'question_id'],
-                    include: [{
-                        model: db.Skill,
-                        attributes: ['id', 'name', 'area_id']
-                    }]
-                }, {
-                    model: db.Profile,
-                    attributes: ['id', 'name', 'birthday', 'user_id', 'status']
-                }],
-                where: {
-                    id: {
-                        [Operator.in]: [questions_id]
-                    }
-                }
-            });
-        } else
-            return res.send({
-                questions: await fillfeed(),
-                status: true
-            });
+        if(questions == 0)
+            return res.send({questions : await fillfeed(), status: true});
 
     } catch (err) {
         return res.status(400).send({
@@ -174,7 +160,7 @@ router.get('/search/:phrase', async (req, res) => {
                 ]
             },
             limit: 75,
-            order: db.sequelize.random()
+            order:  [['created_at', 'DESC']]
         });
     } catch (err) {
         return res.status(400).send({
@@ -376,7 +362,7 @@ async function fillfeed() {
             attributes: ['id', 'name', 'birthday', 'user_id', 'status']
         }],
         limit: 75,
-        order: db.sequelize.random()
+        order:  [['created_at', 'DESC']]
     });
 
     if (!q)
