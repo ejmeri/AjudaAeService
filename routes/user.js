@@ -53,7 +53,7 @@ router.post('/', async (req, res) => {
         var user = await db.User.findOne({where: { email: email }});
 
         if(user)
-            return res.status(400).send({error: 'Email already exists'});
+            return res.status(400).send({error: 'Email already exists', status: false});
 
         if(!email)
             return res.status(400).send({error: 'Email is required.', status: false});
