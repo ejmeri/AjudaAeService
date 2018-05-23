@@ -91,10 +91,16 @@ router.get('/feed/:profile_id', async (req, res) => {
             skillprofile.forEach(element => skills_id.push(element.skill_id));
 
 
-        var skillquestion = await db.SkillQuestion.findAll({where : { skill_id : { [Operator.in] : skills_id }}});
-        
+        var skillquestion = await db.SkillQuestion.findAll({
+            where: {
+                skill_id: {
+                    [Operator.in]: skills_id
+                }
+            }
+        });
+
         skillquestion.forEach(element => questions_id.push(element.question_id));
-    
+
         questions = await db.Question.findAll({
             include: [{
                 model: db.SkillQuestion,
@@ -103,9 +109,14 @@ router.get('/feed/:profile_id', async (req, res) => {
                     model: db.Skill,
                     attributes: ['id', 'name', 'area_id']
                 }],
-                where : {
-                    question_id : { [Operator.in] : questions_id }
-                }  
+                where: {
+                    question_id: {
+                        [Operator.in]: questions_id
+                    }
+                }
+            }, {
+                model: db.Answer,
+                attributes: ['id', 'description']
             }, {
                 model: db.Profile,
                 attributes: ['id', 'name', 'birthday', 'user_id', 'status']
@@ -367,6 +378,9 @@ async function fillfeed() {
                 model: db.Skill,
                 attributes: ['id', 'name', 'area_id']
             }]
+        }, {
+            model: db.Answer,
+            attributes: ['id', 'description']
         }, {
             model: db.Profile,
             attributes: ['id', 'name', 'birthday', 'user_id', 'status']

@@ -163,7 +163,7 @@ router.post('/skillprofile', async (req, res) => {
         var validar = await db.SkillProfile.findOne({where: {profile_id: profile_id, skill_id:skill_id}});
 
         if(validar)
-            return res.status(400).send({error: 'Skill is already registred.'});
+            return res.status(400).send({error: 'Skill is already registred.', status : false});
 
         if (!nivel)
             return res.status(400).send({
