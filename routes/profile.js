@@ -34,7 +34,7 @@ router.get('/:user_id', async (req, res) => {
         });
     }
 
-    console.log(profile.photo);
+    console.log(profile.photo.toString('Base64'));
     
     res.send({profile: profile ,status: true});
 
