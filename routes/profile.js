@@ -96,6 +96,7 @@ router.post('/', async (req, res) => {
     let profile = db.Profile;
     profile = req.body;
 
+    console.log(profile);
     try {
 
         const Profile = await db.Profile.findOne({ where: { user_id: profile.user_id } });
