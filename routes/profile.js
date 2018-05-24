@@ -36,6 +36,8 @@ router.get('/:user_id', async (req, res) => {
         });
     }
 
+    profile.photo.data = profile.photo.data.toString('base64');
+    
     res.send({
         profile: profile,
         status: true
