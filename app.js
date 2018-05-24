@@ -28,7 +28,7 @@ app.use(function (req, res, next) {
 	res.render('notfound');
 });
 	
-db.sequelize.sync().then(function () {
+db.sequelize.sync({force: true}).then(function () {
 	server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function () {
 		var addr = server.address();
 		console.log("Connected to ", addr.address + ":" + addr.port);

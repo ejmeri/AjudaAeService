@@ -18,15 +18,10 @@ router.get('/:user_id', async (req, res) => {
 
         if (user_id)
             profile = await db.Profile.findOne({
-                where: {
-                    user_id: user_id
-                }
+                where: { user_id: user_id }
             });
         else
-            return res.status(400).send({
-                error: 'User id is required.',
-                status: false
-            });
+            return res.status(400).send({error: 'User id is required.',status: false});
 
         if (!profile)
             return res.status(400).send({
@@ -103,11 +98,7 @@ router.post('/', async (req, res) => {
 
     try {
 
-        const Profile = await db.Profile.findOne({
-            where: {
-                user_id: profile.user_id
-            }
-        });
+        const Profile = await db.Profile.findOne({ where: { user_id: profile.user_id } });
 
         if (Profile)
             return res.status(400).send({
@@ -132,6 +123,7 @@ router.post('/', async (req, res) => {
             name: profile.name,
             birthday: profile.birthday,
             status: profile.status,
+            photo: profile.photo,
             user_id: profile.user_id
         });
 

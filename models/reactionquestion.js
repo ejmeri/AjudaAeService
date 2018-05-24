@@ -1,11 +1,11 @@
 module.exports = function (sequelize, DataTypes) {
     return sequelize.define("ReactionQuestion", {
         id: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.BIGINT,
             primaryKey: true,
             autoIncrement: true
         },
-		question_id : { type: DataTypes.INTEGER},
-		reaction_id : { type: DataTypes.INTEGER}
+		question_id : { type: DataTypes.BIGINT},
+		reaction_id : { type: DataTypes.BIGINT}
     });
 };

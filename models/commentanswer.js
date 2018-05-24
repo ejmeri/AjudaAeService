@@ -1,7 +1,7 @@
 module.exports = function (sequelize, DataTypes) {
     return sequelize.define("CommentAnswer", {
         id: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.BIGINT,
             primaryKey: true,
             autoIncrement: true
         },
@@ -10,7 +10,7 @@ module.exports = function (sequelize, DataTypes) {
 			allowNull: false
         },
 		answer_id : {
-            type: DataTypes.INTEGER
+            type: DataTypes.BIGINT
         }
     });
 };

@@ -1,11 +1,11 @@
 module.exports = function (sequelize, DataTypes) {
     return sequelize.define("ProfileGroup", {
         id: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.BIGINT,
             primaryKey: true,
             autoIncrement: true
         },
-        profile_id: {type: DataTypes.INTEGER },
-        group_id: {type: DataTypes.INTEGER }
+        profile_id: {type: DataTypes.BIGINT },
+        group_id: {type: DataTypes.BIGINT }
     });
 };

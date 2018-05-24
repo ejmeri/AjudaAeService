@@ -1,7 +1,7 @@
 module.exports = function (sequelize, DataTypes) {
     return sequelize.define("Skill", {
         id: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.BIGINT,
             primaryKey: true,
             autoIncrement: true
         },
@@ -9,6 +9,6 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.STRING,
 			allowNull: false
         },
-		area_id:{ type: DataTypes.INTEGER}
+		area_id:{ type: DataTypes.BIGINT}
     });
 };

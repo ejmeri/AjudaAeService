@@ -1,7 +1,7 @@
 module.exports = function (sequelize, DataTypes) {
     return sequelize.define("SkillProfile", {
         id: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.BIGINT,
             primaryKey: true,
             autoIncrement: true
         },
@@ -9,8 +9,8 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.INTEGER,
 			allowNull: false
         },
-		profile_id:{ type: DataTypes.INTEGER },
-		skill_id: { type: DataTypes.INTEGER}
+		profile_id:{ type: DataTypes.BIGINT },
+		skill_id: { type: DataTypes.BIGINT }
 		
     });
 };
