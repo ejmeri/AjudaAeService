@@ -17,9 +17,7 @@ router.get('/:user_id', async (req, res) => {
         var profile;
 
         if (user_id)
-            profile = await db.Profile.findOne({
-                where: { user_id: user_id }
-            });
+            profile = await db.Profile.findOne({ where: { user_id: user_id } });
         else
             return res.status(400).send({error: 'User id is required.',status: false});
 
@@ -36,7 +34,7 @@ router.get('/:user_id', async (req, res) => {
         });
     }
 
-    console.log(profile.photo.data);
+    console.log(profile.photo);
     
     res.send({profile: profile ,status: true});
 
