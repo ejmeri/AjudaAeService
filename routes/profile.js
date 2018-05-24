@@ -36,10 +36,9 @@ router.get('/:user_id', async (req, res) => {
         });
     }
 
-    const objJsonStr = JSON.stringify(profile.photo); 
-    const photo = new Buffer(objJsonStr).toString("base64");
+    console.log(profile.photo.data);
     
-    res.send({profile: profile, photo: photo ,status: true});
+    res.send({profile: profile ,status: true});
 
 });
 
