@@ -162,6 +162,9 @@ router.get('/search/:phrase', async (req, res) => {
                     attributes: ['id', 'name', 'area_id']
                 }]
             }, {
+                model: db.Answer,
+                attributes: ['id', 'description']
+            }, {
                 model: db.Profile,
                 attributes: ['id', 'name', 'birthday', 'user_id', 'status']
             }],
