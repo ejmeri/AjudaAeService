@@ -27,6 +27,8 @@ if (!global.hasOwnProperty('db')) {
 		Group: sequelize.import(__dirname + '/group'),
 		ProfileGroup: sequelize.import(__dirname + '/profilegroup'),
 		SkillGroup: sequelize.import(__dirname + '/skillgroup'),
+		AnwserGroup: sequelize.import(__dirname + '/answergroup'),
+		QuestionGroup: sequelize.import(__dirname + '/questiongroup'),
 		// Ejota: sequelize.import(__dirname + '/ejota'),
 		// add your other models here
 		// up
@@ -54,6 +56,8 @@ if (!global.hasOwnProperty('db')) {
 	global.db.Profile.hasMany(global.db.ProfileGroup)
 	global.db.Group.hasMany(global.db.SkillGroup)
 	global.db.Skill.hasMany(global.db.SkillGroup)
+	global.db.QuestionGroup.hasMany(global.db.AnwserGroup)
+	global.db.ProfileGroup.hasMany(global.db.QuestionGroup)
 
 	// JOINERS
 	global.db.Question.belongsTo(global.db.Profile);
